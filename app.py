@@ -5,12 +5,14 @@ from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
-# app.secret_key = 'myawesomesecretkey'
+# app.secret_key = 'Clave secreta no utilizada'
 
 app.config['MONGO_URI'] = 'mongodb://localhost/pythontest.users'
 
 mongo = PyMongo(app)
 
+
+#############################################     Endopoint para agregar usuarios  ########################################################################
 
 @app.route('/users', methods=['POST'])
 def create_user():    
@@ -35,13 +37,15 @@ def create_user():
         return response
     else:
         return not_found()
-
+###########################################Endpoint para obtener TODOS LOS USUARIOS######################################################################################
 
 @app.route('/users', methods=['GET'])
 def get_users():
     users = mongo.db.users.find()
     response = json_util.dumps(users)
     return Response(response, mimetype="application/json")
+
+#######################################################Endpoint para filtrar usuarios por USERNAME########################################################################
 
 
 @app.route('/users/<username>', methods=['GET'])
@@ -52,6 +56,7 @@ def get_user(username):
     return Response(response, mimetype="application/json")
 
 
+#########################################################Control de errores#################################################################################################
 
 @app.errorhandler(404)
 def not_found(error=None):
